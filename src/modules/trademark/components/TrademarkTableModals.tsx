@@ -29,21 +29,16 @@ const TrademarkModal: React.FC<TrademarkModalProps> = ({ trademark, onClose }) =
     return () => clearTimeout(timer);
   }, [trademark.id]); // Reset loading when trademark changes
   
-  // Handle closing with loading animation
+  // Direct close without loading animation
   const handleClose = () => {
-    setIsLoading(true);
-    
-    // Add a small delay before actually closing
-    setTimeout(() => {
-      onClose();
-    }, 300);
+    onClose();
   };
   
   return (
     <Modal 
       isOpen={true} 
       onClose={handleClose}
-      width="700px"
+      width="900px"
       maxHeight="90vh"
       isLoading={isLoading}
     >

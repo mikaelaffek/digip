@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { TableProps } from '../../types/table';
+import { TableProps, TableFilters, DateFilterConfig } from '../../types/table';
 import styles from '../../styles/Table.module.css';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
@@ -20,12 +20,34 @@ export function Table<T extends { id: string }>({
   onRowClick,
   sortConfig,
   onSort,
+  filters,
+  onFilterChange,
   emptyMessage = 'No data available',
   pagination,
   containerWidth,
 }: TableProps<T>) {
   // State for delayed loading display
   const [showLoading, setShowLoading] = useState(false);
+  
+  // Initialize filters if not provided
+  const [internalFilters, setInternalFilters] = useState<TableFilters>(
+    filters || { dateFilters: {}, statusFilters: {} }
+  );
+  
+  // Update internal filters when external filters change
+  useEffect(() => {
+    if (filters) {
+      setInternalFilters(filters);
+    }
+  }, [filters]);
+  
+  // Handle filter changes
+  const handleFilterChange = (newFilters: TableFilters) => {
+    setInternalFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
   
   // Effect to add delay before showing loading state
   useEffect(() => {
@@ -53,7 +75,11 @@ export function Table<T extends { id: string }>({
     return (
       <div className={styles.tableContainer} style={containerStyle}>
         <table className={styles.table}>
-          <TableHeader columns={columns} />
+          <TableHeader 
+          columns={columns} 
+          filters={filters || internalFilters}
+          onFilterChange={onFilterChange || handleFilterChange}
+        />
           <tbody>
             {showLoading && [...Array(5)].map((_, index) => (
               <LoadingRow key={index} columns={columns} index={index} />
@@ -79,7 +105,13 @@ export function Table<T extends { id: string }>({
     return (
       <div className={styles.tableContainer} style={containerStyle}>
         <table className={styles.table}>
-          <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
+          <TableHeader 
+            columns={columns} 
+            sortConfig={sortConfig} 
+            onSort={onSort}
+            filters={filters || internalFilters}
+            onFilterChange={onFilterChange || handleFilterChange}
+          />
           <tbody>
             <tr>
               <td colSpan={columns.length} className={styles.emptyMessage}>
@@ -96,7 +128,13 @@ export function Table<T extends { id: string }>({
   return (
     <div className={styles.tableContainer} style={containerStyle}>
       <table className={styles.table}>
-        <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
+        <TableHeader 
+          columns={columns} 
+          sortConfig={sortConfig} 
+          onSort={onSort} 
+          filters={filters || internalFilters}
+          onFilterChange={onFilterChange || handleFilterChange}
+        />
         <tbody>
           {data.map((item) => (
             <TableRow

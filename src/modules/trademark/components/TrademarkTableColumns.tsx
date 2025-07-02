@@ -22,7 +22,7 @@ export const getTrademarkColumns = (onViewClick?: (trademark: Trademark) => void
     sortable: true,
   },
   {
-    key: 'status',
+    key: 'properties.status',
     header: 'Status',
     render: (trademark: Trademark) => {
       const status = trademark.properties.status || 'Unknown';
@@ -34,6 +34,8 @@ export const getTrademarkColumns = (onViewClick?: (trademark: Trademark) => void
       );
     },
     sortable: true,
+    type: 'status',
+    filterable: true,
   },
   {
     key: 'registration_date',
@@ -43,6 +45,19 @@ export const getTrademarkColumns = (onViewClick?: (trademark: Trademark) => void
         ? formatDate(trademark.properties.registration_date)
         : 'N/A',
     sortable: true,
+    type: 'date',
+    filterable: true,
+  },
+  {
+    key: 'application_date',
+    header: 'Application Date',
+    render: (trademark: Trademark) => 
+      trademark.properties.application_date 
+        ? formatDate(trademark.properties.application_date)
+        : 'N/A',
+    sortable: true,
+    type: 'date',
+    filterable: true,
   },
   {
     key: 'expiry_date',
@@ -52,6 +67,8 @@ export const getTrademarkColumns = (onViewClick?: (trademark: Trademark) => void
         ? formatDate(trademark.properties.expiry_date)
         : 'N/A',
     sortable: true,
+    type: 'date',
+    filterable: true,
   },
   {
     key: 'region',

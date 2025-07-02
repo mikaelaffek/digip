@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { fetchTrademarks, filterTrademarks } from '../services/trademarkService';
 import { Trademark, TrademarkResponse } from '../../../types/trademark';
-import { SortConfig } from '../../../types/table';
+import { SortConfig, DateFilterConfig, StatusFilterConfig } from '../../../types/table';
 import { useApiResource } from '../../../hooks/useApiResource';
 import { TABLE_CONFIG } from '../../../config/constants';
 
@@ -16,6 +16,8 @@ export const useTrademarks = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(TABLE_CONFIG.DEFAULT_PAGE_SIZE);
   const [isDelayedLoading, setIsDelayedLoading] = useState(true);
+  const [dateFilters, setDateFilters] = useState<Record<string, DateFilterConfig>>({});
+  const [statusFilters, setStatusFilters] = useState<Record<string, StatusFilterConfig>>({});
 
   // Fetch trademarks using our generic API resource hook with notifications
   const {
@@ -52,7 +54,79 @@ export const useTrademarks = () => {
     return () => clearTimeout(timer);
   }, [apiLoading]);
 
-  // Filter trademarks based on search term
+  // Helper function to apply date filters
+  const applyDateFilters = (data: TrademarkResponse): TrademarkResponse => {
+    
+    // Apply date filters
+    const dateFiltered = {...data};
+    dateFiltered.data = data.data.filter(trademark => {
+      // Check each date filter
+      return Object.entries(dateFilters).every(([columnKey, filter]) => {
+        if (!filter.startDate && !filter.endDate) return true;
+        
+        // Get the date value from the trademark based on the column key
+        const keys = columnKey.split('.');
+        let dateValue: any = trademark;
+        
+        // Traverse the nested properties
+        for (const key of keys) {
+          dateValue = dateValue?.[key];
+        }
+        
+        // If no date value, it doesn't match the filter
+        if (!dateValue) return false;
+        
+        // Convert to Date object if it's a string
+        const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue;
+        
+        // Check if date is within range
+        const afterStartDate = !filter.startDate || date >= filter.startDate;
+        const beforeEndDate = !filter.endDate || date <= filter.endDate;
+        
+        return afterStartDate && beforeEndDate;
+      });
+    });
+    
+    return dateFiltered;
+  };
+  
+  // Helper function to apply status filters
+  const applyStatusFilters = (data: TrademarkResponse) => {
+    // Apply status filters
+    const statusFiltered = {...data};
+    console.log('Applying status filters:', statusFilters);
+    
+    statusFiltered.data = data.data.filter(trademark => {
+      // Check each status filter
+      return Object.entries(statusFilters).every(([columnKey, filter]) => {
+        if (filter.selectedStatuses.length === 0) return true;
+        
+        // Get the status value from the trademark based on the column key
+        const keys = columnKey.split('.');
+        let statusValue: any = trademark;
+        
+        // Traverse the nested properties
+        for (const key of keys) {
+          statusValue = statusValue?.[key];
+        }
+        
+        console.log(`Column key: ${columnKey}, Status value: ${statusValue}, Selected statuses:`, filter.selectedStatuses);
+        
+        // If no status value, it doesn't match the filter
+        if (!statusValue) return false;
+        
+        // Check if status is in the selected statuses
+        const matches = filter.selectedStatuses.includes(statusValue);
+        console.log(`Status ${statusValue} matches filter: ${matches}`);
+        return matches;
+      });
+    });
+    
+    console.log(`Filtered from ${data.data.length} to ${statusFiltered.data.length} trademarks`);
+    return statusFiltered;
+  };
+  
+  // Filter trademarks based on search term and filters
   const filteredTrademarks = useMemo(() => {
     if (!trademarkResponse) return {
       status: true,
@@ -69,8 +143,24 @@ export const useTrademarks = () => {
       total: 0
     } as TrademarkResponse;
     
-    return filterTrademarks(trademarkResponse, searchTerm);
-  }, [trademarkResponse, searchTerm]);
+    // First filter by search term
+    const searchFiltered = filterTrademarks(trademarkResponse, searchTerm);
+    
+    // Apply filters if they exist
+    let filteredData = searchFiltered;
+    
+    // Apply date filters if any exist
+    if (Object.keys(dateFilters).length > 0) {
+      filteredData = applyDateFilters(filteredData);
+    }
+    
+    // Apply status filters if any exist
+    if (Object.keys(statusFilters).length > 0) {
+      filteredData = applyStatusFilters(filteredData);
+    }
+    
+    return filteredData;
+  }, [trademarkResponse, searchTerm, dateFilters, statusFilters]);
 
   // Sort trademarks based on sort config
   const sortedTrademarks = useMemo(() => {
@@ -148,14 +238,18 @@ export const useTrademarks = () => {
     setSearchTerm,
     sortConfig,
     handleSort,
-    totalCount: sortedTrademarks.length,
+    dateFilters,
+    setDateFilters,
+    statusFilters,
+    setStatusFilters,
+    totalCount: filteredTrademarks?.data?.length || 0,
     pagination: {
       currentPage,
       totalPages,
       pageSize,
-      onPageChange: handlePageChange,
-      onPageSizeChange: handlePageSizeChange,
-      pageSizeOptions: TABLE_CONFIG.PAGINATION_OPTIONS,
+      onPageChange: setCurrentPage,
+      onPageSizeChange: setPageSize,
+      pageSizeOptions: TABLE_CONFIG.PAGINATION_OPTIONS
     },
   };
 };

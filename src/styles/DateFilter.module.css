@@ -1,0 +1,119 @@
+.dateFilterContainer {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 280px;
+  background-color: white;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 100;
+  margin-top: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.datePickerWrapper {
+  margin-bottom: 12px;
+}
+
+.dateLabel {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.datePicker {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.datePicker:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(66, 184, 131, 0.2);
+}
+
+.filterActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.filterButton {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  flex: 1;
+}
+
+.filterButton:not(:last-child) {
+  margin-right: 8px;
+}
+
+.applyButton {
+  background-color: var(--primary);
+  color: white;
+}
+
+.applyButton:hover {
+  background-color: var(--primary-dark);
+}
+
+.clearButton {
+  background-color: var(--gray-100);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.clearButton:hover {
+  background-color: var(--gray-200);
+}
+
+/* Ensure the datepicker dropdown appears above other elements */
+:global(.react-datepicker-popper) {
+  z-index: 200 !important;
+}
+
+/* Style the datepicker to match our Vue.js-inspired design */
+:global(.react-datepicker) {
+  border-color: var(--border-color);
+  font-family: inherit;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:global(.react-datepicker__header) {
+  background-color: var(--gray-50);
+  border-bottom-color: var(--border-color);
+}
+
+:global(.react-datepicker__day--selected),
+:global(.react-datepicker__day--in-selecting-range),
+:global(.react-datepicker__day--in-range) {
+  background-color: var(--primary);
+}
+
+:global(.react-datepicker__day--keyboard-selected) {
+  background-color: rgba(66, 184, 131, 0.2);
+  color: var(--primary);
+}
+
+:global(.react-datepicker__day:hover) {
+  background-color: var(--gray-100);
+}
+
+:global(.react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range)) {
+  background-color: rgba(66, 184, 131, 0.5);
+}

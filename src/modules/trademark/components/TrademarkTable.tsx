@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTrademarks } from '../hooks/useTrademarks';
 import { Table } from '../../../components/Table/Table';
 import { Trademark } from '../../../types/trademark';
+import { TableFilters } from '../../../types/table';
 import styles from '../../../styles/TrademarkTable.module.css';
 import TrademarkTableFilters from './TrademarkTableFilters';
 import TrademarkModal from './TrademarkTableModals';
@@ -20,17 +21,37 @@ const TrademarkTable: React.FC = () => {
     handleSort,
     totalCount,
     pagination,
+    dateFilters,
+    setDateFilters,
+    statusFilters,
+    setStatusFilters,
   } = useTrademarks();
 
   const [selectedTrademark, setSelectedTrademark] = useState<Trademark | null>(null);
 
-  // Handle row click to show modal
-  const handleRowClick = (trademark: Trademark) => {
+  // Handle view button click to show modal
+  const handleViewClick = (trademark: Trademark) => {
     setSelectedTrademark(trademark);
   };
 
   // Get columns from the separated file and pass the handler
-  const columns = getTrademarkColumns(handleRowClick);
+  const columns = getTrademarkColumns(handleViewClick);
+  
+  // Handle filter changes
+  const handleFilterChange = (filters: TableFilters) => {
+    console.log('Filter changed:', filters);
+    
+    if (filters.searchTerm !== undefined && filters.searchTerm !== searchTerm) {
+      setSearchTerm(filters.searchTerm);
+    }
+    
+    // Update date filters
+    setDateFilters(filters.dateFilters);
+    
+    // Update status filters
+    console.log('Setting status filters:', filters.statusFilters);
+    setStatusFilters(filters.statusFilters);
+  };
 
   // Handle closing the modal
   const handleCloseModal = () => {
@@ -56,9 +77,15 @@ const TrademarkTable: React.FC = () => {
         data={trademarks}
         isLoading={isLoading}
         error={error}
-        onRowClick={handleRowClick}
+        onRowClick={undefined}
         sortConfig={sortConfig}
         onSort={handleSort}
+        filters={{
+          dateFilters: dateFilters || {},
+          statusFilters: statusFilters || {},
+          searchTerm: searchTerm
+        }}
+        onFilterChange={handleFilterChange}
         emptyMessage="No trademarks found matching your criteria"
         containerWidth="100%"
         pagination={{
