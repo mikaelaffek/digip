@@ -15,11 +15,13 @@ const TrademarkModal: React.FC<TrademarkModalProps> = ({ trademark, onClose }) =
     e.stopPropagation();
   };
 
+  const { properties } = trademark;
+
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={handleModalClick}>
         <div className={styles.modalHeader}>
-          <h2>{trademark.properties.display_text || 'Trademark Details'}</h2>
+          <h2>{properties.display_text || 'Trademark Details'}</h2>
           <button className={styles.closeButton} onClick={onClose}>
             ×
           </button>
@@ -27,53 +29,68 @@ const TrademarkModal: React.FC<TrademarkModalProps> = ({ trademark, onClose }) =
         
         <div className={styles.modalContent}>
           <div className={styles.modalRow}>
-            {trademark.properties.logo && (
+            {properties.logo && (
               <div className={styles.logoContainer}>
                 <img
-                  src={trademark.properties.logo}
-                  alt={trademark.properties.display_text || 'Trademark logo'}
+                  src={properties.logo}
+                  alt={properties.display_text || 'Trademark logo'}
                   className={styles.detailLogo}
                 />
               </div>
             )}
           </div>
           
-          <div className={styles.detailsGrid}>
-            <DetailItem label="ID" value={trademark.id} />
-            <DetailItem label="Brand" value={trademark.properties.brand} />
-            <DetailItem label="Status" value={trademark.properties.status} />
-            <DetailItem label="Region" value={trademark.properties.region} />
-            <DetailItem label="Application No." value={trademark.properties.application_no} />
-            <DetailItem label="Registration No." value={trademark.properties.registration_number} />
-            <DetailItem label="Application Date" value={trademark.properties.application_date} />
-            <DetailItem label="Registration Date" value={trademark.properties.registration_date} />
-            <DetailItem label="Expiry Date" value={trademark.properties.expiry_date} />
-            <DetailItem label="Classes" value={trademark.properties.classes} />
-            <DetailItem label="Mark Feature" value={trademark.properties.mark_feature} />
-            <DetailItem label="Word Mark" value={trademark.properties.word_mark_specification_text} />
+          <div className={styles.modalSection}>
+            <h3>Dates</h3>
+            <DetailItem 
+              label="Registration Date" 
+              value={properties.registration_date ? formatDate(properties.registration_date) : null} 
+            />
+            <DetailItem 
+              label="Application Date" 
+              value={properties.application_date ? formatDate(properties.application_date) : null} 
+            />
+            <DetailItem 
+              label="Expiry Date" 
+              value={properties.expiry_date ? formatDate(properties.expiry_date) : null} 
+            />
           </div>
           
-          <div className={styles.sectionTitle}>Applicant Information</div>
-          <div className={styles.detailsGrid}>
-            <DetailItem label="Legal Name" value={trademark.properties.applicant_legal_name} />
-            <DetailItem label="Legal Form" value={trademark.properties.applicant_legal_form} />
-            <DetailItem label="Type" value={trademark.properties.applicant_type} />
-            <DetailItem label="Country" value={trademark.properties.applicant_country} />
-            <DetailItem label="City" value={trademark.properties.applicant_city} />
-            <DetailItem label="Address" value={trademark.properties.applicant_street_address} />
+          <div className={styles.modalSection}>
+            <h3>Ownership</h3>
+            <DetailItem label="Owner" value={properties.applicant_legal_name} />
+            <DetailItem label="City" value={properties.applicant_city} />
+            <DetailItem label="Country" value={properties.applicant_country} />
+            <DetailItem label="Address" value={properties.applicant_street_address} />
           </div>
           
-          <div className={styles.sectionTitle}>Goods and Services</div>
-          <div className={styles.goodsAndServices}>
-            <p>{trademark.properties.goods_and_services}</p>
+          <div className={styles.modalSection}>
+            <h3>Classification</h3>
+            <DetailItem 
+              label="Classes" 
+              value={properties.class_numbers ? properties.class_numbers.join(", ") : null} 
+            />
+            <DetailItem label="Goods & Services" value={properties.goods_and_services} />
           </div>
           
-          {trademark.properties.designated_countries && 
-           trademark.properties.designated_countries.length > 0 && (
+          {properties.logo && (
+            <div className={styles.modalSection}>
+              <h3>Trademark Image</h3>
+              <img 
+                src={properties.logo} 
+                alt={`${properties.brand || 'Trademark'} image`} 
+                className={styles.trademarkImage}
+              />
+            </div>
+          )}
+          
+          {properties.designated_countries && properties.designated_countries.length > 0 && (
             <>
-              <div className={styles.sectionTitle}>Designated Countries</div>
-              <div className={styles.countriesGrid}>
-                {trademark.properties.designated_countries.map((country) => (
+              <div className={styles.modalSection}>
+                <h3>Designated Countries</h3>
+              </div>
+              <div className={styles.badgeContainer}>
+                {properties.designated_countries.map((country: string) => (
                   <span key={country} className={styles.countryBadge}>
                     {country}
                   </span>
@@ -81,6 +98,11 @@ const TrademarkModal: React.FC<TrademarkModalProps> = ({ trademark, onClose }) =
               </div>
             </>
           )}
+          
+          <div className={styles.modalSection}>
+            <h3>Region</h3>
+            <DetailItem label="Region" value={properties.region} />
+          </div>
         </div>
       </div>
     </div>
@@ -100,6 +122,22 @@ const DetailItem: React.FC<{ label: string; value: string | null | undefined }> 
       <span className={styles.detailValue}>{value}</span>
     </div>
   );
+};
+
+// Helper function to format dates
+const formatDate = (dateString: string | null): string => {
+  if (!dateString) return 'N/A';
+  
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  } catch (e) {
+    return dateString;
+  }
 };
 
 export default TrademarkModal;

@@ -11,27 +11,16 @@ export interface TrademarkProperties {
   applicant_name_normalized: string | null;
   applicant_nationality: string | null;
   applicant_phone: string | null;
-  applicant_postal_code: string | null;
-  applicant_state_of_incorporation: string | null;
   applicant_street_address: string | null;
-  applicant_type: string | null;
   application_date: string | null;
-  application_language_code: string | null;
-  application_language_code_secondary: string | null;
   application_no: string | null;
   brand: string | null;
   classes: string | null;
   designated_countries: string[] | null;
+  display_text: string | null;
   expiry_date: string | null;
   goods_and_services: string | null;
-  group: string | null;
-  hs_createdate: string | null;
-  hs_lastmodifieddate: string | null;
-  hs_object_id: string | null;
-  hubspot_trademark_description: string | null;
   logo: string | null;
-  madrid_agreement: string | null;
-  madrid_protocol: string | null;
   mark_feature: string | null;
   mark_image_category_code: string | null;
   mark_image_category_kind: string | null;
@@ -64,17 +53,8 @@ export interface Trademark {
   archived: boolean;
 }
 
-export interface TrademarkResponse {
-  status: boolean;
-  message: string;
-  data: Trademark[];
-  meta: any[];
-  prev_page_query: string | null;
-  next_page_query: string | null;
-  path: string;
-  current_page: number;
-  per_page: number;
-  pages: number;
-  to: number;
-  total: number;
-}
+import { ApiResponse } from './api';
+
+// Use the generic ApiResponse with Trademark as the resource type
+export type TrademarkResponse = ApiResponse<Trademark>;
+

@@ -5,6 +5,7 @@ import { useTrademarks } from '../../hooks/useTrademarks';
 import { Table } from '../Table/Table';
 import { Trademark } from '../../types/trademark';
 import { TableColumn } from '../../types/table';
+import { formatDate } from '../../utils/dateUtils';
 import styles from '../../styles/TrademarkTable.module.css';
 import TrademarkTableFilters from './TrademarkTableFilters';
 import TrademarkModal from './TrademarkTableModals';
@@ -29,63 +30,74 @@ const TrademarkTable: React.FC = () => {
       key: 'properties.display_text',
       header: 'Trademark',
       sortable: true,
-      render: (item) => (
-        <div className={styles.trademarkCell}>
-          {item.properties.logo && (
-            <img
-              src={item.properties.logo}
-              alt={item.properties.display_text || 'Trademark logo'}
-              className={styles.trademarkLogo}
-            />
-          )}
-          <span>{item.properties.display_text || 'Unnamed Trademark'}</span>
-        </div>
-      ),
     },
     {
-      key: 'properties.application_no',
-      header: 'Application No.',
+      key: 'registration_number',
+      header: 'Registration No.',
+      render: (trademark) => trademark.properties.registration_number || 'N/A',
       sortable: true,
     },
     {
-      key: 'properties.status',
+      key: 'status',
       header: 'Status',
+      render: (trademark) => {
+        const status = trademark.properties.status || 'Unknown';
+        const statusClass = status.replace(/\s+/g, '');
+        return (
+          <span className={`${styles.statusBadge} ${styles[`status${statusClass}`]}`}>
+            {status}
+          </span>
+        );
+      },
       sortable: true,
-      render: (item) => (
-        <span className={`${styles.statusBadge} ${styles[item.properties.status?.toLowerCase() || 'unknown']}`}>
-          {item.properties.status || 'Unknown'}
-        </span>
-      ),
     },
     {
-      key: 'properties.region',
-      header: 'Region',
+      key: 'registration_date',
+      header: 'Registration Date',
+      render: (trademark) => formatDate(trademark.properties.registration_date),
       sortable: true,
     },
     {
-      key: 'properties.application_date',
-      header: 'Application Date',
-      sortable: true,
-      render: (item) => formatDate(item.properties.application_date),
-    },
-    {
-      key: 'properties.expiry_date',
+      key: 'expiry_date',
       header: 'Expiry Date',
+      render: (trademark) => formatDate(trademark.properties.expiry_date),
       sortable: true,
-      render: (item) => formatDate(item.properties.expiry_date),
     },
     {
-      key: 'properties.class_numbers',
-      header: 'Classes',
-      render: (item) => (
-        <div className={styles.classBadges}>
-          {item.properties.class_numbers?.map((classNumber) => (
-            <span key={classNumber} className={styles.classBadge}>
-              {classNumber}
-            </span>
-          ))}
-        </div>
-      ),
+      key: 'mark_feature',
+      header: 'Type',
+      render: (trademark) => trademark.properties.mark_feature || 'N/A',
+      sortable: true,
+    },
+    {
+      key: 'region',
+      header: 'Region',
+      render: (trademark) => trademark.properties.region || 'N/A',
+      sortable: true,
+    },
+    {
+      key: 'designated_countries',
+      header: 'Countries',
+      render: (trademark) => {
+        const countries = trademark.properties.designated_countries || [];
+        return (
+          <div className={styles.countriesContainer}>
+            {countries && countries.length > 0 ? (
+              countries.slice(0, 3).map((country) => (
+                <span key={country} className={styles.countryBadge}>
+                  {country}
+                </span>
+              ))
+            ) : (
+              <span>-</span>
+            )}
+            {countries && countries.length > 3 && (
+              <span className={styles.countryBadge}>+{countries.length - 3}</span>
+            )}
+          </div>
+        );
+      },
+      sortable: false,
     },
   ];
 
@@ -132,22 +144,6 @@ const TrademarkTable: React.FC = () => {
       )}
     </div>
   );
-};
-
-// Helper function to format dates
-const formatDate = (dateString: string | null): string => {
-  if (!dateString) return 'N/A';
-  
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  } catch (e) {
-    return dateString;
-  }
 };
 
 export default TrademarkTable;

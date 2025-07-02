@@ -1,8 +1,11 @@
 "use client";
 
 import React from 'react';
-import { TableProps, SortConfig } from '../../types/table';
+import { TableProps } from '../../types/table';
 import styles from '../../styles/Table.module.css';
+import { TableHeader } from './TableHeader';
+import { TableRow } from './TableRow';
+import { LoadingRow } from './LoadingRow';
 
 /**
  * Generic reusable Table component
@@ -23,24 +26,10 @@ export function Table<T extends { id: string }>({
     return (
       <div className={styles.tableContainer}>
         <table className={styles.table}>
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.key} style={{ width: column.width }}>
-                  {column.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
+          <TableHeader columns={columns} />
           <tbody>
             {[...Array(5)].map((_, index) => (
-              <tr key={index} className={styles.loadingRow}>
-                {columns.map((column) => (
-                  <td key={`${index}-${column.key}`} className={styles.loadingCell}>
-                    <div className={styles.skeleton}></div>
-                  </td>
-                ))}
-              </tr>
+              <LoadingRow key={index} columns={columns} index={index} />
             ))}
           </tbody>
         </table>
@@ -58,33 +47,12 @@ export function Table<T extends { id: string }>({
     );
   }
 
-  // Render sort indicator
-  const renderSortIndicator = (columnKey: string, currentSort?: SortConfig) => {
-    if (!currentSort || columnKey !== currentSort.key) {
-      return <span className={styles.sortIcon}>↕</span>;
-    }
-    
-    return (
-      <span className={styles.sortIcon}>
-        {currentSort.direction === 'asc' ? '↑' : '↓'}
-      </span>
-    );
-  };
-
   // Handle empty data
   if (!data.length) {
     return (
       <div className={styles.tableContainer}>
         <table className={styles.table}>
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.key} style={{ width: column.width }}>
-                  {column.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
+          <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
           <tbody>
             <tr>
               <td colSpan={columns.length} className={styles.emptyMessage}>
@@ -101,52 +69,18 @@ export function Table<T extends { id: string }>({
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                style={{ width: column.width }}
-                className={column.sortable ? styles.sortable : ''}
-                onClick={() => {
-                  if (column.sortable && onSort) {
-                    onSort(column.key);
-                  }
-                }}
-              >
-                <div className={styles.headerContent}>
-                  {column.header}
-                  {column.sortable && onSort && renderSortIndicator(column.key, sortConfig)}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
+        <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
         <tbody>
           {data.map((item) => (
-            <tr
+            <TableRow
               key={item.id}
-              onClick={() => onRowClick && onRowClick(item)}
-              className={onRowClick ? styles.clickableRow : ''}
-            >
-              {columns.map((column) => (
-                <td key={`${item.id}-${column.key}`}>
-                  {column.render
-                    ? column.render(item)
-                    : getNestedValue(item, column.key)}
-                </td>
-              ))}
-            </tr>
+              item={item}
+              columns={columns}
+              onRowClick={onRowClick}
+            />
           ))}
         </tbody>
       </table>
     </div>
   );
-}
-
-// Helper function to get nested values from an object using dot notation
-// e.g., getNestedValue(obj, 'user.address.city')
-function getNestedValue(obj: any, path: string): any {
-  const keys = path.split('.');
-  return keys.reduce((o, key) => (o && o[key] !== undefined ? o[key] : null), obj);
 }

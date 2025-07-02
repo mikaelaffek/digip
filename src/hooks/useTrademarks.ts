@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { fetchTrademarks, filterTrademarks } from '../services/trademarkService';
 import { Trademark, TrademarkResponse } from '../types/trademark';
 import { SortConfig } from '../types/table';
+import { useApiResource } from './useApiResource';
 
 export const useTrademarks = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,16 +13,20 @@ export const useTrademarks = () => {
     direction: 'asc',
   });
 
-  // Fetch trademarks using React Query
+  // Fetch trademarks using our generic API resource hook
   const {
     data: trademarkResponse,
     isLoading,
     error,
     refetch,
-  } = useQuery<TrademarkResponse, Error>({
-    queryKey: ['trademarks'],
-    queryFn: fetchTrademarks,
-  });
+  } = useApiResource<Trademark>(
+    ['trademarks'], // queryKey
+    fetchTrademarks, // fetchFn
+    { // additional options
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false
+    }
+  );
 
   // Filter trademarks based on search term
   const filteredTrademarks = useMemo(() => {
@@ -47,37 +51,35 @@ export const useTrademarks = () => {
   // Sort trademarks based on sort config
   const sortedTrademarks = useMemo(() => {
     if (!filteredTrademarks?.data) return [];
-
-    const { key, direction } = sortConfig;
+    
+    if (!sortConfig.key) return filteredTrademarks.data;
     
     return [...filteredTrademarks.data].sort((a, b) => {
-      // Handle nested properties (e.g., 'properties.display_text')
-      const keys = key.split('.');
-      
-      // Get the values to compare
+      // Handle nested properties (e.g., "properties.brand")
+      const keys = sortConfig.key.split('.');
       let aValue: any = a;
       let bValue: any = b;
       
-      for (const k of keys) {
-        aValue = aValue?.[k];
-        bValue = bValue?.[k];
+      // Traverse the nested properties
+      for (const key of keys) {
+        aValue = aValue?.[key];
+        bValue = bValue?.[key];
       }
       
-      // Handle null/undefined values
-      if (aValue == null) return direction === 'asc' ? -1 : 1;
-      if (bValue == null) return direction === 'asc' ? 1 : -1;
+      // Handle null or undefined values
+      if (aValue === null || aValue === undefined) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (bValue === null || bValue === undefined) return sortConfig.direction === 'asc' ? 1 : -1;
       
-      // Compare values
-      if (typeof aValue === 'string') {
-        return direction === 'asc'
-          ? aValue.localeCompare(bValue)
+      // Compare values based on their type
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortConfig.direction === 'asc' 
+          ? aValue.localeCompare(bValue) 
           : bValue.localeCompare(aValue);
       }
       
-      // For non-string values
-      return direction === 'asc'
-        ? aValue > bValue ? 1 : -1
-        : aValue < bValue ? 1 : -1;
+      return sortConfig.direction === 'asc' 
+        ? (aValue > bValue ? 1 : -1) 
+        : (aValue > bValue ? -1 : 1);
     });
   }, [filteredTrademarks, sortConfig]);
 
