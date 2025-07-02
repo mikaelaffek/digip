@@ -52,7 +52,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
   };
 
   return (
-    <div className={styles.dateFilterContainer} ref={filterRef}>
+    <div className={`${styles.dateFilterContainer} ${styles.datepickerWrapper}`} ref={filterRef}>
       <div className={styles.datePickerWrapper}>
         <label className={styles.dateLabel}>Start Date</label>
         <DatePicker

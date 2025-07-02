@@ -82,38 +82,38 @@
 }
 
 /* Ensure the datepicker dropdown appears above other elements */
-:global(.react-datepicker-popper) {
+.datepickerWrapper :global(.react-datepicker-popper) {
   z-index: 200 !important;
 }
 
 /* Style the datepicker to match our Vue.js-inspired design */
-:global(.react-datepicker) {
+.datepickerWrapper :global(.react-datepicker) {
   border-color: var(--border-color);
   font-family: inherit;
   border-radius: var(--radius);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-:global(.react-datepicker__header) {
+.datepickerWrapper :global(.react-datepicker__header) {
   background-color: var(--gray-50);
   border-bottom-color: var(--border-color);
 }
 
-:global(.react-datepicker__day--selected),
-:global(.react-datepicker__day--in-selecting-range),
-:global(.react-datepicker__day--in-range) {
+.datepickerWrapper :global(.react-datepicker__day--selected),
+.datepickerWrapper :global(.react-datepicker__day--in-selecting-range),
+.datepickerWrapper :global(.react-datepicker__day--in-range) {
   background-color: var(--primary);
 }
 
-:global(.react-datepicker__day--keyboard-selected) {
+.datepickerWrapper :global(.react-datepicker__day--keyboard-selected) {
   background-color: rgba(66, 184, 131, 0.2);
   color: var(--primary);
 }
 
-:global(.react-datepicker__day:hover) {
+.datepickerWrapper :global(.react-datepicker__day:hover) {
   background-color: var(--gray-100);
 }
 
-:global(.react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range)) {
+.datepickerWrapper :global(.react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range)) {
   background-color: rgba(66, 184, 131, 0.5);
 }
