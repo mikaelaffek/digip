@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { TableColumn, SortConfig, TableFilters } from '../../../types/table';
-import styles from '../Table.module.css';
+import styles from '../../../styles/Table.module.css';
 import { DateFilterIcon } from './DateFilterIcon';
 import { StatusFilterIcon } from './StatusFilterIcon';
 import { useTableHeaderState } from './useTableHeaderState';

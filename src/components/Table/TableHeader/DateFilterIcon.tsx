@@ -1,6 +1,6 @@
 import { FaCalendarAlt } from 'react-icons/fa';
 import DateFilter from '../DateFilter';
-import styles from '../Table.module.css';
+import styles from '../../../styles/Table.module.css';
 import { DateFilterConfig } from '../../../types/table';
 
 interface DateFilterIconProps {

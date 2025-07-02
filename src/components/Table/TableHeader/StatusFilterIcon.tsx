@@ -1,6 +1,6 @@
 import { FaFilter } from 'react-icons/fa';
 import { StatusFilter } from '../StatusFilter';
-import styles from '../Table.module.css';
+import styles from '../../../styles/Table.module.css';
 
 interface StatusFilterIconProps {
   active: boolean;
