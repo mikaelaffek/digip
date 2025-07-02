@@ -9,7 +9,7 @@ import styles from '../../../styles/TrademarkTable.module.css';
  * Separating this into its own file makes the main component cleaner
  * and allows for easier reuse of column definitions
  */
-export const getTrademarkColumns = (): TableColumn<Trademark>[] => [
+export const getTrademarkColumns = (onViewClick?: (trademark: Trademark) => void): TableColumn<Trademark>[] => [
   {
     key: 'properties.display_text',
     header: 'Trademark',
@@ -85,6 +85,28 @@ export const getTrademarkColumns = (): TableColumn<Trademark>[] => [
             <span className={styles.countryBadge}>+{countries.length - 3}</span>
           )}
         </div>
+      );
+    },
+    sortable: false,
+  },
+  {
+    key: 'view',
+    header: 'View',
+    render: (trademark: Trademark) => {
+      return (
+        <button 
+          className={styles.viewButton}
+          onClick={(e) => {
+            // Stop event propagation to prevent the row click handler from firing
+            e.stopPropagation();
+            // Call the onViewClick handler if provided
+            if (onViewClick) {
+              onViewClick(trademark);
+            }
+          }}
+        >
+          Details
+        </button>
       );
     },
     sortable: false,

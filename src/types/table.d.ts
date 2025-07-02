@@ -25,4 +25,5 @@ export interface TableProps<T> {
   onSort?: (key: string) => void;
   emptyMessage?: string;
   pagination?: PaginationConfig;
+  containerWidth?: string;
 }

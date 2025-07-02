@@ -24,13 +24,13 @@ const TrademarkTable: React.FC = () => {
 
   const [selectedTrademark, setSelectedTrademark] = useState<Trademark | null>(null);
 
-  // Get columns from the separated file
-  const columns = getTrademarkColumns();
-
   // Handle row click to show modal
   const handleRowClick = (trademark: Trademark) => {
     setSelectedTrademark(trademark);
   };
+
+  // Get columns from the separated file and pass the handler
+  const columns = getTrademarkColumns(handleRowClick);
 
   // Handle closing the modal
   const handleCloseModal = () => {
@@ -60,6 +60,7 @@ const TrademarkTable: React.FC = () => {
         sortConfig={sortConfig}
         onSort={handleSort}
         emptyMessage="No trademarks found matching your criteria"
+        containerWidth="100%"
         pagination={{
           currentPage: pagination.currentPage,
           totalPages: pagination.totalPages,

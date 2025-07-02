@@ -8,4 +8,5 @@ export interface ModalProps {
   headerClassName?: string;
   width?: string;
   maxHeight?: string;
+  isLoading?: boolean;
 }

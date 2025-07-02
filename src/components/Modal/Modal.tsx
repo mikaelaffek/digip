@@ -4,9 +4,6 @@ import React, { CSSProperties } from 'react';
 import styles from './Modal.module.css';
 import { ModalProps } from './types/modal';
 
-/**
- * A reusable modal component that can be used throughout the application
- */
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -17,6 +14,7 @@ const Modal: React.FC<ModalProps> = ({
   headerClassName = '',
   width,
   maxHeight,
+  isLoading = false,
 }) => {
   if (!isOpen) return null;
 
@@ -37,6 +35,11 @@ const Modal: React.FC<ModalProps> = ({
         onClick={handleModalClick}
         style={modalStyle}
       >
+        {isLoading && (
+          <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+          </div>
+        )}
         <div className={`${styles.modalHeader} ${headerClassName}`}>
           {title ? <h2>{title}</h2> : <div></div>}
           <button className={styles.closeButton} onClick={onClose}>

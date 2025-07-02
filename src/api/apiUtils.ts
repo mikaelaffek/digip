@@ -1,10 +1,5 @@
 import { ApiResponse } from '../types/api';
 
-/**
- * Generic function to fetch any resource from an API endpoint
- * @param url The API endpoint URL
- * @returns Promise with the API response
- */
 export const fetchResource = async <T>(url: string): Promise<ApiResponse<T>> => {
   try {
     const response = await fetch(url, {

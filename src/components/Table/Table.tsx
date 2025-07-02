@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TableProps } from '../../types/table';
 import styles from '../../styles/Table.module.css';
 import { TableHeader } from './TableHeader';
@@ -22,15 +22,40 @@ export function Table<T extends { id: string }>({
   onSort,
   emptyMessage = 'No data available',
   pagination,
+  containerWidth,
 }: TableProps<T>) {
+  // State for delayed loading display
+  const [showLoading, setShowLoading] = useState(false);
+  
+  // Effect to add delay before showing loading state
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (isLoading) {
+      // Add a small delay before showing loading indicators
+      timer = setTimeout(() => {
+        setShowLoading(true);
+      }, 300); // 300ms delay for better UX
+    } else {
+      setShowLoading(false);
+    }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isLoading]);
+  
   // Handle loading state
+  // Create container style with optional width
+  const containerStyle = containerWidth ? { width: containerWidth } : {};
+
   if (isLoading) {
     return (
-      <div className={styles.tableContainer}>
+      <div className={styles.tableContainer} style={containerStyle}>
         <table className={styles.table}>
           <TableHeader columns={columns} />
           <tbody>
-            {[...Array(5)].map((_, index) => (
+            {showLoading && [...Array(5)].map((_, index) => (
               <LoadingRow key={index} columns={columns} index={index} />
             ))}
           </tbody>
@@ -42,7 +67,7 @@ export function Table<T extends { id: string }>({
   // Handle error state
   if (error) {
     return (
-      <div className={styles.errorContainer}>
+      <div className={styles.errorContainer} style={containerStyle}>
         <p>Error loading data: {error.message}</p>
         <button onClick={() => window.location.reload()}>Retry</button>
       </div>
@@ -52,7 +77,7 @@ export function Table<T extends { id: string }>({
   // Handle empty data
   if (!data.length) {
     return (
-      <div className={styles.tableContainer}>
+      <div className={styles.tableContainer} style={containerStyle}>
         <table className={styles.table}>
           <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
           <tbody>
@@ -69,7 +94,7 @@ export function Table<T extends { id: string }>({
 
   // Render table with data
   return (
-    <div className={styles.tableContainer}>
+    <div className={styles.tableContainer} style={containerStyle}>
       <table className={styles.table}>
         <TableHeader columns={columns} sortConfig={sortConfig} onSort={onSort} />
         <tbody>

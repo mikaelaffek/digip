@@ -4,6 +4,7 @@ import React from 'react';
 import { Trademark } from '../../../types/trademark';
 import { DetailItem, Section, Badge } from '../../../components/Modal';
 import { formatDate } from '../../../utils/dateUtils';
+import styles from './TrademarkDetailsModal.module.css';
 
 interface TrademarkDetailsProps {
   /**
@@ -20,17 +21,17 @@ const TrademarkDetails: React.FC<TrademarkDetailsProps> = ({ trademark }) => {
   const { properties } = trademark;
 
   return (
-    <>
-      <h2 style={{ margin: '0 0 20px 0', fontSize: '1.5rem', fontWeight: 600 }}>
+    <div className={styles.trademarkDetails}>
+      <h2 className={styles.trademarkTitle}>
         {properties.display_text || 'Trademark Details'}
       </h2>
       
       {properties.logo && (
-        <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+        <div className={styles.logoContainer}>
           <img
             src={properties.logo}
             alt={properties.display_text || 'Trademark logo'}
-            style={{ maxWidth: '200px', maxHeight: '200px' }}
+            className={styles.trademarkLogo}
           />
         </div>
       )}
@@ -67,7 +68,7 @@ const TrademarkDetails: React.FC<TrademarkDetailsProps> = ({ trademark }) => {
       
       {properties.designated_countries && properties.designated_countries.length > 0 && (
         <Section title="Designated Countries">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+          <div className={styles.badgeContainer}>
             {properties.designated_countries.map((country: string) => (
               <Badge key={country} type="country">
                 {country}
@@ -80,7 +81,7 @@ const TrademarkDetails: React.FC<TrademarkDetailsProps> = ({ trademark }) => {
       <Section title="Region">
         <DetailItem label="Region" value={properties.region} />
       </Section>
-    </>
+    </div>
   );
 };
 
