@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { TableProps, TableFilters, DateFilterConfig } from '../../types/table';
 import styles from '../../styles/Table.module.css';
-import { TableHeader } from './TableHeader';
+import { TableHeader } from './TableHeader/TableHeader';
 import { TableRow } from './TableRow';
 import { LoadingRow } from './LoadingRow';
 import { Pagination } from './Pagination';
