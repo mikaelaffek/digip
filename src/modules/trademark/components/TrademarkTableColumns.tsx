@@ -1,8 +1,8 @@
 import React from 'react';
-import { TableColumn } from '../../types/table';
-import { Trademark } from '../../types/trademark';
-import { formatDate } from '../../utils/dateUtils';
-import styles from '../../styles/TrademarkTable.module.css';
+import { TableColumn } from '../../../types/table';
+import { Trademark } from '../../../types/trademark';
+import { formatDate } from '../../../utils/dateUtils';
+import styles from '../../../styles/TrademarkTable.module.css';
 
 /**
  * Defines the columns for the trademark table

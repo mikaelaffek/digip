@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import styles from '../../styles/TrademarkTable.module.css';
+import styles from '../../../styles/TrademarkTable.module.css';
 
 interface TrademarkTableFiltersProps {
   searchTerm: string;

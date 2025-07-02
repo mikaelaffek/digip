@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 // Use dynamic import to avoid SSR issues with React Query
 const TrademarkTable = dynamic(
-  () => import('../../src/components/TrademarkTable/TrademarkTable'),
+  () => import('../../src/modules/trademark/components/TrademarkTable'),
   { ssr: false }
 );
 

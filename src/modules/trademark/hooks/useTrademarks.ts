@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import { fetchTrademarks, filterTrademarks } from '../services/trademarkService';
-import { Trademark, TrademarkResponse } from '../types/trademark';
-import { SortConfig } from '../types/table';
-import { useApiResource } from './useApiResource';
+import { Trademark, TrademarkResponse } from '../../../types/trademark';
+import { SortConfig } from '../../../types/table';
+import { useApiResource } from '../../../hooks/useApiResource';
 
 export const useTrademarks = () => {
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useTrademarks } from '../../hooks/useTrademarks';
-import { Table } from '../Table/Table';
-import { Trademark } from '../../types/trademark';
-import styles from '../../styles/TrademarkTable.module.css';
+import { useTrademarks } from '../hooks/useTrademarks';
+import { Table } from '../../../components/Table/Table';
+import { Trademark } from '../../../types/trademark';
+import styles from '../../../styles/TrademarkTable.module.css';
 import TrademarkTableFilters from './TrademarkTableFilters';
 import TrademarkModal from './TrademarkTableModals';
 import { getTrademarkColumns } from './TrademarkTableColumns';

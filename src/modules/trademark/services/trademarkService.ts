@@ -1,6 +1,6 @@
-import { ApiResponse } from '../types/api';
-import { Trademark, TrademarkResponse } from '../types/trademark';
-import { fetchResource } from '../api/apiUtils';
+import { ApiResponse } from '../../../types/api';
+import { Trademark, TrademarkResponse } from '../../../types/trademark';
+import { fetchResource } from '../../../api/apiUtils';
 
 /**
  * Fetches trademark data from the mock API (public/trademark-portfolio.json)
@@ -18,6 +18,7 @@ export const fetchTrademarks = async (): Promise<TrademarkResponse> => {
       data: [
         {
           id: "sample-1",
+          type: "trademark",
           properties: {
             active: "Active",
             applicant_city: null,
@@ -45,28 +46,14 @@ export const fetchTrademarks = async (): Promise<TrademarkResponse> => {
             mark_image_category_code: null,
             mark_image_category_kind: null,
             mark_record_publication_identifier: null,
-            parent_application_no: null,
-            parent_region: null,
-            previous_application_date: null,
-            previous_application_number: null,
-            priority: null,
-            region: "US",
-            registration_date: "2023-01-01",
             registration_number: "12345",
-            registry_status: null,
-            renewal: null,
             status: "Registered",
-            trademark_business_types: null,
-            word_mark_specification_text: "Sample",
-            groups: {},
-            class_numbers: ["9", "42"]
-          },
-          createdAt: "2023-01-01T00:00:00Z",
-          updatedAt: "2023-01-01T00:00:00Z",
-          archived: false
+            registration_date: "2023-01-01",
+            region: "US"
+          }
         }
       ],
-      meta: {}
+      meta: {} as Record<string, unknown>
     };
   }
 };
@@ -106,10 +93,10 @@ export const filterTrademarks = (
     data: data.data.filter(trademark => {
       const properties = trademark.properties;
       for (const key in properties) {
-        if (Object.prototype.hasOwnProperty.call(properties, key)) {
-          if (valueContainsTerm(properties[key], term)) {
-            return true;
-          }
+        const propKey = key as keyof typeof trademark.properties;
+        if (trademark.properties.hasOwnProperty(key) && 
+            valueContainsTerm(trademark.properties[propKey], term)) {
+          return true;
         }
       }
       return false;
