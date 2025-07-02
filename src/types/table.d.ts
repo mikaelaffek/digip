@@ -1,3 +1,5 @@
+import { PaginationConfig } from './pagination';
+
 export type SortDirection = 'asc' | 'desc';
 
 export interface SortConfig {
@@ -22,4 +24,5 @@ export interface TableProps<T> {
   sortConfig?: SortConfig;
   onSort?: (key: string) => void;
   emptyMessage?: string;
+  pagination?: PaginationConfig;
 }

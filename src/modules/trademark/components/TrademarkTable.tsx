@@ -19,6 +19,7 @@ const TrademarkTable: React.FC = () => {
     sortConfig,
     handleSort,
     totalCount,
+    pagination,
   } = useTrademarks();
 
   const [selectedTrademark, setSelectedTrademark] = useState<Trademark | null>(null);
@@ -59,6 +60,14 @@ const TrademarkTable: React.FC = () => {
         sortConfig={sortConfig}
         onSort={handleSort}
         emptyMessage="No trademarks found matching your criteria"
+        pagination={{
+          currentPage: pagination.currentPage,
+          totalPages: pagination.totalPages,
+          pageSize: pagination.pageSize,
+          onPageChange: pagination.onPageChange,
+          onPageSizeChange: pagination.onPageSizeChange,
+          pageSizeOptions: pagination.pageSizeOptions
+        }}
       />
 
       {selectedTrademark && (

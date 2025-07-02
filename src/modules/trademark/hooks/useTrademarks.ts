@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { fetchTrademarks, filterTrademarks } from '../services/trademarkService';
 import { Trademark, TrademarkResponse } from '../../../types/trademark';
 import { SortConfig } from '../../../types/table';
 import { useApiResource } from '../../../hooks/useApiResource';
+import { TABLE_CONFIG } from '../../../config/constants';
 
 export const useTrademarks = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,11 +13,14 @@ export const useTrademarks = () => {
     key: 'properties.display_text',
     direction: 'asc',
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(TABLE_CONFIG.DEFAULT_PAGE_SIZE);
+  const [isDelayedLoading, setIsDelayedLoading] = useState(true);
 
   // Fetch trademarks using our generic API resource hook with notifications
   const {
     data: trademarkResponse,
-    isLoading,
+    isLoading: apiLoading,
     error,
     refetch,
   } = useApiResource<Trademark>(
@@ -33,6 +37,20 @@ export const useTrademarks = () => {
       successMessage: 'Trademark data loaded successfully'
     }
   );
+  
+  // Simulate loading delay for better UX
+  useEffect(() => {
+    if (apiLoading) {
+      setIsDelayedLoading(true);
+      return;
+    }
+    
+    const timer = setTimeout(() => {
+      setIsDelayedLoading(false);
+    }, TABLE_CONFIG.LOADING_DELAY_MS);
+    
+    return () => clearTimeout(timer);
+  }, [apiLoading]);
 
   // Filter trademarks based on search term
   const filteredTrademarks = useMemo(() => {
@@ -98,20 +116,46 @@ export const useTrademarks = () => {
     }));
   };
 
+  // Apply pagination to sorted trademarks
+  const paginatedTrademarks = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return sortedTrademarks.slice(startIndex, endIndex);
+  }, [sortedTrademarks, currentPage, pageSize]);
+  
+  // Calculate total pages
+  const totalPages = useMemo(() => {
+    return Math.ceil(sortedTrademarks.length / pageSize);
+  }, [sortedTrademarks.length, pageSize]);
+  
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  
+  // Handle page size change
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1); // Reset to first page when changing page size
+  };
+
   return {
-    trademarks: sortedTrademarks,
-    isLoading,
+    trademarks: paginatedTrademarks,
+    isLoading: isDelayedLoading,
     error,
     refetch,
     searchTerm,
     setSearchTerm,
     sortConfig,
     handleSort,
-    totalCount: trademarkResponse?.total || 0,
+    totalCount: sortedTrademarks.length,
     pagination: {
-      currentPage: trademarkResponse?.current_page || 1,
-      totalPages: trademarkResponse?.pages || 1,
-      perPage: trademarkResponse?.per_page || 10,
+      currentPage,
+      totalPages,
+      pageSize,
+      onPageChange: handlePageChange,
+      onPageSizeChange: handlePageSizeChange,
+      pageSizeOptions: TABLE_CONFIG.PAGINATION_OPTIONS,
     },
   };
 };

@@ -6,6 +6,7 @@ import styles from '../../styles/Table.module.css';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import { LoadingRow } from './LoadingRow';
+import { Pagination } from './Pagination';
 
 /**
  * Generic reusable Table component
@@ -20,6 +21,7 @@ export function Table<T extends { id: string }>({
   sortConfig,
   onSort,
   emptyMessage = 'No data available',
+  pagination,
 }: TableProps<T>) {
   // Handle loading state
   if (isLoading) {
@@ -81,6 +83,18 @@ export function Table<T extends { id: string }>({
           ))}
         </tbody>
       </table>
+      
+      {/* Render pagination if pagination props are provided */}
+      {pagination && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={pagination.onPageChange}
+          pageSize={pagination.pageSize}
+          pageSizeOptions={pagination.pageSizeOptions}
+          onPageSizeChange={pagination.onPageSizeChange}
+        />
+      )}
     </div>
   );
 }
