@@ -1,17 +1,6 @@
-"use client";
-
-import dynamic from 'next/dynamic';
-
-// Use dynamic import to avoid SSR issues with React Query
-const TrademarkTable = dynamic(
-  () => import('../src/components/TrademarkTable/TrademarkTable'),
-  { ssr: false }
-);
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <TrademarkTable />
-    </div>
-  );
+  // Redirect from the root page to the trademark page
+  redirect('/trademark');
 }
