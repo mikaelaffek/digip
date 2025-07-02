@@ -11,6 +11,7 @@
 
 .table {
   width: 100%;
+  min-width: 900px; /* Ensure minimum width to prevent excessive squeezing */
   border-collapse: separate;
   border-spacing: 0;
   font-size: 14px;
@@ -44,6 +45,24 @@
 }
 
 .table tbody tr:hover {
+  background-color: var(--background-alt);
+}
+
+/* Make the last column (Details button) sticky */
+.table th:last-child,
+.table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: var(--background);
+  z-index: 5;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.table th:last-child {
+  background-color: var(--background-alt);
+}
+
+.table tbody tr:hover td:last-child {
   background-color: var(--background-alt);
 }
 
