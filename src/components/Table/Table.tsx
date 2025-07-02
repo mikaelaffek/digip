@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { TableProps, SortConfig } from '../../types/table';
 import styles from '../../styles/Table.module.css';

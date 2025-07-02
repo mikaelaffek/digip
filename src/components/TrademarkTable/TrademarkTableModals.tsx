@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Trademark } from '../../types/trademark';
 import styles from '../../styles/TrademarkTable.module.css';

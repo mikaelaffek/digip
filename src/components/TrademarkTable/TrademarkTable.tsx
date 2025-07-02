@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useTrademarks } from '../../hooks/useTrademarks';
 import { Table } from '../Table/Table';
