@@ -4,11 +4,10 @@ import React, { useState } from 'react';
 import { useTrademarks } from '../../hooks/useTrademarks';
 import { Table } from '../Table/Table';
 import { Trademark } from '../../types/trademark';
-import { TableColumn } from '../../types/table';
-import { formatDate } from '../../utils/dateUtils';
 import styles from '../../styles/TrademarkTable.module.css';
 import TrademarkTableFilters from './TrademarkTableFilters';
 import TrademarkModal from './TrademarkTableModals';
+import { getTrademarkColumns } from './TrademarkTableColumns';
 
 const TrademarkTable: React.FC = () => {
   const {
@@ -24,82 +23,8 @@ const TrademarkTable: React.FC = () => {
 
   const [selectedTrademark, setSelectedTrademark] = useState<Trademark | null>(null);
 
-  // Define columns for the trademark table
-  const columns: TableColumn<Trademark>[] = [
-    {
-      key: 'properties.display_text',
-      header: 'Trademark',
-      sortable: true,
-    },
-    {
-      key: 'registration_number',
-      header: 'Registration No.',
-      render: (trademark) => trademark.properties.registration_number || 'N/A',
-      sortable: true,
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      render: (trademark) => {
-        const status = trademark.properties.status || 'Unknown';
-        const statusClass = status.replace(/\s+/g, '');
-        return (
-          <span className={`${styles.statusBadge} ${styles[`status${statusClass}`]}`}>
-            {status}
-          </span>
-        );
-      },
-      sortable: true,
-    },
-    {
-      key: 'registration_date',
-      header: 'Registration Date',
-      render: (trademark) => formatDate(trademark.properties.registration_date),
-      sortable: true,
-    },
-    {
-      key: 'expiry_date',
-      header: 'Expiry Date',
-      render: (trademark) => formatDate(trademark.properties.expiry_date),
-      sortable: true,
-    },
-    {
-      key: 'mark_feature',
-      header: 'Type',
-      render: (trademark) => trademark.properties.mark_feature || 'N/A',
-      sortable: true,
-    },
-    {
-      key: 'region',
-      header: 'Region',
-      render: (trademark) => trademark.properties.region || 'N/A',
-      sortable: true,
-    },
-    {
-      key: 'designated_countries',
-      header: 'Countries',
-      render: (trademark) => {
-        const countries = trademark.properties.designated_countries || [];
-        return (
-          <div className={styles.countriesContainer}>
-            {countries && countries.length > 0 ? (
-              countries.slice(0, 3).map((country) => (
-                <span key={country} className={styles.countryBadge}>
-                  {country}
-                </span>
-              ))
-            ) : (
-              <span>-</span>
-            )}
-            {countries && countries.length > 3 && (
-              <span className={styles.countryBadge}>+{countries.length - 3}</span>
-            )}
-          </div>
-        );
-      },
-      sortable: false,
-    },
-  ];
+  // Get columns from the separated file
+  const columns = getTrademarkColumns();
 
   // Handle row click to show modal
   const handleRowClick = (trademark: Trademark) => {

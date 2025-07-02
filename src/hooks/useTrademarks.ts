@@ -13,7 +13,7 @@ export const useTrademarks = () => {
     direction: 'asc',
   });
 
-  // Fetch trademarks using our generic API resource hook
+  // Fetch trademarks using our generic API resource hook with notifications
   const {
     data: trademarkResponse,
     isLoading,
@@ -24,7 +24,13 @@ export const useTrademarks = () => {
     fetchTrademarks, // fetchFn
     { // additional options
       staleTime: 5 * 60 * 1000, // 5 minutes
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      // Notification options - enable all for debugging
+      showErrorNotification: true,
+      showLoadingNotification: true,
+      showSuccessNotification: true,
+      loadingMessage: 'Loading trademark data...',
+      successMessage: 'Trademark data loaded successfully'
     }
   );
 

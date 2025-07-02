@@ -1,3 +1,11 @@
+import { ApiResponse } from './api';
+
+export type TrademarkClassNumbers = string[];
+
+export interface TrademarkGroups {
+  [key: string]: string;
+}
+
 export interface TrademarkProperties {
   active: string | null;
   applicant_city: string | null;
@@ -38,11 +46,9 @@ export interface TrademarkProperties {
   status: string | null;
   trademark_business_types: string | null;
   word_mark_specification_text: string | null;
-  groups: {
-    [key: string]: string;
-  };
+  groups: TrademarkGroups;
   display_text: string | null;
-  class_numbers: string[];
+  class_numbers: TrademarkClassNumbers;
 }
 
 export interface Trademark {
@@ -53,8 +59,5 @@ export interface Trademark {
   archived: boolean;
 }
 
-import { ApiResponse } from './api';
-
-// Use the generic ApiResponse with Trademark as the resource type
 export type TrademarkResponse = ApiResponse<Trademark>;
 
