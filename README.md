@@ -20,7 +20,19 @@ A Next.js application that displays trademark data in a sortable and filterable 
 src/
   components/
     Modal/                       # Reusable modal components
+      Modal.tsx                  # Core modal component with overlay and header
+      DetailItem.tsx            # Component for displaying labeled information
+      Section.tsx               # Component for organizing content into sections
+      Badge.tsx                 # Component for displaying status badges and tags
+      types/                    # TypeScript type definitions for modal components
+    Notification/               # Notification system components
+      NotificationService.tsx   # Wrapper around react-toastify
+      useNotification.ts        # Custom hook for accessing notification functions
     Table/                       # Generic, reusable table components
+      Table.tsx                 # Main table component
+      TableHeader.tsx           # Component for table headers and sorting
+      TableRow.tsx              # Component for data row rendering
+      LoadingRow.tsx            # Skeleton loading states for tables
   config/
     constants.ts                 # Application-wide constants
   i18n/                          # Internationalization system
@@ -97,10 +109,4 @@ TypeScript is used throughout the application to provide type safety and better 
 
 CSS Modules are used for styling to ensure component-scoped styles without conflicts. The styles are organized by component for better maintainability.
 
-## Future Improvements
 
-- Add pagination for large datasets
-- Implement more advanced filtering options
-- Add unit and integration tests
-- Add more accessibility features
-- Implement real API integration
