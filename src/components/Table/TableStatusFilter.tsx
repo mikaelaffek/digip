@@ -10,7 +10,7 @@ export interface StatusFilterProps {
   selectedStatuses: string[];
 }
 
-export const StatusFilter: React.FC<StatusFilterProps> = ({
+export const TableStatusFilter: React.FC<StatusFilterProps> = ({
   columnKey,
   onFilterChange,
   onClose,

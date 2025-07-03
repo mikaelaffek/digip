@@ -1,4 +1,4 @@
-export interface DetailItemProps {
+export interface ModalDetailItemProps {
   label: string;
   value: string | null | undefined;
   className?: string;

@@ -1,10 +1,10 @@
 "use client";
 import React from 'react';
-import { TableColumn, SortConfig, TableFilters } from '../../../types/table';
-import styles from '../../../styles/Table.module.css';
-import { DateFilterIcon } from './DateFilterIcon';
-import { StatusFilterIcon } from './StatusFilterIcon';
-import { useTableHeaderState } from './useTableHeaderState';
+import { TableColumn, SortConfig, TableFilters } from '@/types/table';
+import styles from '@/styles/Table.module.css';
+import { TableHeaderDateFilterIcon } from './TableHeaderDateFilterIcon';
+import { TableHeaderStatusFilterIcon } from './TableHeaderStatusFilterIcon';
+import { useTableHeaderState } from '@/components/Table/hooks/useTableHeaderState';
 
 interface TableHeaderProps<T> {
   columns: TableColumn<T>[];
@@ -49,26 +49,26 @@ export function TableHeader<T>({ columns, sortConfig, onSort, filters, onFilterC
                 {column.sortable && onSort && renderSortIndicator(column.key)}
               </div>
               {column.type === 'date' && column.filterable && onFilterChange && (
-                <DateFilterIcon
+                <TableHeaderDateFilterIcon
                   active={state.activeDateFilter === column.key}
-                  onClick={e => { e.stopPropagation(); state.toggleDateFilter(column.key); }}
+                  onClick={e => { e.stopPropagation(); state.handleDateFilterToggle(column.key); }}
                   columnKey={column.key}
                   filter={filters?.dateFilters[column.key]}
                   onFilterChange={state.handleDateFilterChange}
-                  onClose={() => state.setActiveDateFilter(null)}
-                  isActive={!!state.isDateFilterActive(column.key)}
+                  onClose={state.handleDateFilterClose}
+                  isActive={!!filters?.dateFilters[column.key]}
                 />
               )}
               {column.type === 'status' && column.filterable && onFilterChange && (
-                <StatusFilterIcon
+                <TableHeaderStatusFilterIcon
                   active={state.activeStatusFilter === column.key}
-                  onClick={e => { e.stopPropagation(); state.toggleStatusFilter(column.key); }}
+                  onClick={e => { e.stopPropagation(); state.handleStatusFilterToggle(column.key); }}
                   columnKey={column.key}
                   availableStatuses={getAvailableStatuses(column.key)}
                   selectedStatuses={filters?.statusFilters[column.key]?.selectedStatuses || []}
                   onFilterChange={selected => state.handleStatusFilterChange(column.key, selected)}
-                  onClose={() => state.setActiveStatusFilter(null)}
-                  isActive={!!state.isStatusFilterActive(column.key)}
+                  onClose={state.handleStatusFilterClose}
+                  isActive={!!(filters?.statusFilters[column.key]?.selectedStatuses && filters.statusFilters[column.key].selectedStatuses.length > 0)}
                 />
               )}
             </div>

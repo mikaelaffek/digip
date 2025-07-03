@@ -1,13 +1,10 @@
 "use client";
 
 import React from 'react';
-import styles from './Modal.module.css';
-import { SectionProps } from './types/section';
+import styles from './styles/ModalComponent.module.css';
+import { ModalSectionProps } from '@/components/Modal/types/modal-section';
 
-/**
- * A reusable component for organizing content into sections within modals
- */
-const Section: React.FC<SectionProps> = ({
+const ModalSection: React.FC<ModalSectionProps> = ({
   title,
   children,
   className = '',
@@ -21,4 +18,4 @@ const Section: React.FC<SectionProps> = ({
   );
 };
 
-export default Section;
+export default ModalSection;

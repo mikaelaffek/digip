@@ -1,5 +1,5 @@
 import { FaCalendarAlt } from 'react-icons/fa';
-import DateFilter from '../DateFilter';
+import TableDateFilter from '../TableDateFilter';
 import styles from '../../../styles/Table.module.css';
 import { DateFilterConfig } from '../../../types/table';
 
@@ -13,7 +13,7 @@ interface DateFilterIconProps {
   isActive: boolean;
 }
 
-export function DateFilterIcon(props: DateFilterIconProps) {
+export function TableHeaderDateFilterIcon(props: DateFilterIconProps) {
   return (
     <div className={styles.filterIconContainer}>
       <button
@@ -24,7 +24,7 @@ export function DateFilterIcon(props: DateFilterIconProps) {
         <FaCalendarAlt />
       </button>
       {props.active && (
-        <DateFilter
+        <TableDateFilter
           columnKey={props.columnKey}
           initialFilter={props.filter}
           onFilterChange={props.onFilterChange}

@@ -7,17 +7,72 @@ import { SortConfig, DateFilterConfig, StatusFilterConfig } from '../../../types
 import { useApiResource } from '../../../hooks/useApiResource';
 import { TABLE_CONFIG } from '../../../config/constants';
 
-export const useTrademarks = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+interface UseTrademarkParams {
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  searchTerm?: string;
+  dateFilters?: Record<string, DateFilterConfig>;
+  statusFilters?: Record<string, StatusFilterConfig>;
+  onTotalCountChange?: (count: number) => void;
+}
+
+export const useTrademarks = (params?: UseTrademarkParams) => {
+  const [searchTerm, setSearchTerm] = useState(params?.searchTerm || '');
   const [sortConfig, setSortConfig] = useState<SortConfig>({
+    key: params?.sortBy || 'properties.display_text',
+    direction: params?.sortOrder || 'asc',
+  });
+  
+  // Update sort config when params change
+  useEffect(() => {
+    if (params?.sortBy && params?.sortOrder) {
+      setSortConfig({
+        key: params.sortBy,
+        direction: params.sortOrder,
+      });
+    }
+  }, [params?.sortBy, params?.sortOrder]);
+  
+  // Previous sort config state
+  const [prevSortConfig] = useState<SortConfig>({
     key: 'properties.display_text',
     direction: 'asc',
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(TABLE_CONFIG.DEFAULT_PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(params?.page || 1);
+  
+  // Update current page when params change
+  useEffect(() => {
+    if (params?.page) {
+      setCurrentPage(params.page);
+    }
+  }, [params?.page]);
+  const [pageSize, setPageSize] = useState(params?.pageSize || TABLE_CONFIG.DEFAULT_PAGE_SIZE);
+  
+  // Update page size when params change
+  useEffect(() => {
+    if (params?.pageSize) {
+      setPageSize(params.pageSize);
+    }
+  }, [params?.pageSize]);
   const [isDelayedLoading, setIsDelayedLoading] = useState(true);
-  const [dateFilters, setDateFilters] = useState<Record<string, DateFilterConfig>>({});
-  const [statusFilters, setStatusFilters] = useState<Record<string, StatusFilterConfig>>({});
+  const [dateFilters, setDateFilters] = useState<Record<string, DateFilterConfig>>(params?.dateFilters || {});
+  
+  // Update date filters when params change
+  useEffect(() => {
+    if (params?.dateFilters) {
+      setDateFilters(params.dateFilters);
+    }
+  }, [params?.dateFilters]);
+  const [statusFilters, setStatusFilters] = useState<Record<string, StatusFilterConfig>>(params?.statusFilters || {});
+  
+  // Update status filters when params change
+  useEffect(() => {
+    if (params?.statusFilters) {
+      setStatusFilters(params.statusFilters);
+    }
+  }, [params?.statusFilters]);
 
   // Fetch trademarks using our generic API resource hook with notifications
   const {
@@ -217,6 +272,13 @@ export const useTrademarks = () => {
   const totalPages = useMemo(() => {
     return Math.ceil(sortedTrademarks.length / pageSize);
   }, [sortedTrademarks.length, pageSize]);
+  
+  // Notify parent component of total count changes
+  useEffect(() => {
+    if (params?.onTotalCountChange) {
+      params.onTotalCountChange(filteredTrademarks?.data?.length || 0);
+    }
+  }, [filteredTrademarks?.data?.length, params?.onTotalCountChange]);
   
   // Handle page change
   const handlePageChange = (page: number) => {

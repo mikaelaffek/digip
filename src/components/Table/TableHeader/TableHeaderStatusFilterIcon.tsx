@@ -1,5 +1,5 @@
 import { FaFilter } from 'react-icons/fa';
-import { StatusFilter } from '../StatusFilter';
+import { TableStatusFilter } from '../TableStatusFilter';
 import styles from '../../../styles/Table.module.css';
 
 interface StatusFilterIconProps {
@@ -13,7 +13,7 @@ interface StatusFilterIconProps {
   isActive: boolean;
 }
 
-export function StatusFilterIcon(props: StatusFilterIconProps) {
+export function TableHeaderStatusFilterIcon(props: StatusFilterIconProps) {
   return (
     <div className={styles.filterIconContainer}>
       <button
@@ -24,7 +24,7 @@ export function StatusFilterIcon(props: StatusFilterIconProps) {
         <FaFilter />
       </button>
       {props.active && (
-        <StatusFilter
+        <TableStatusFilter
           columnKey={props.columnKey}
           availableStatuses={props.availableStatuses}
           selectedStatuses={props.selectedStatuses}

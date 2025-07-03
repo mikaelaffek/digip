@@ -15,7 +15,7 @@ interface DateFilterProps {
   onClose: () => void;
 }
 
-const DateFilter: React.FC<DateFilterProps> = ({
+const TableDateFilter: React.FC<DateFilterProps> = ({
   columnKey,
   initialFilter,
   onFilterChange,
@@ -100,4 +100,4 @@ const DateFilter: React.FC<DateFilterProps> = ({
   );
 };
 
-export default DateFilter;
+export default TableDateFilter;

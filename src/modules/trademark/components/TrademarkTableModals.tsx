@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Trademark } from '../../../types/trademark';
-import { Modal } from '../../../components/Modal';
+import { Trademark } from '@/types/trademark';
+import Modal from '@/components/Modal/Modal';
 import TrademarkDetailsModal from './TrademarkDetailsModal';
 
 interface TrademarkModalProps {

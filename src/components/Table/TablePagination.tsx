@@ -12,7 +12,7 @@ export interface PaginationProps {
   onPageSizeChange?: (pageSize: number) => void;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
+export const TablePagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,

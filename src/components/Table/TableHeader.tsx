@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import { TableColumn, SortConfig, TableFilters, DateFilterConfig, StatusFilterConfig } from '../../types/table';
-import styles from '../../styles/Table.module.css';
-import DateFilter from './DateFilter';
-import { StatusFilter } from './StatusFilter';
+import { TableColumn, SortConfig, TableFilters, DateFilterConfig, StatusFilterConfig } from '@/types/table';
+import styles from '@/styles/Table.module.css';
+import TableDateFilter from '@/components/Table/TableDateFilter';
+import { TableStatusFilter } from '@/components/Table/TableStatusFilter';
 import { FaCalendarAlt, FaFilter } from 'react-icons/fa';
 
 interface TableHeaderProps<T> {
@@ -140,7 +140,7 @@ export function TableHeader<T>({ columns, sortConfig, onSort, filters, onFilterC
                   </button>
                   
                   {activeDateFilter === column.key && (
-                    <DateFilter
+                    <TableDateFilter
                       columnKey={column.key}
                       initialFilter={filters?.dateFilters[column.key]}
                       onFilterChange={handleDateFilterChange}
@@ -164,7 +164,7 @@ export function TableHeader<T>({ columns, sortConfig, onSort, filters, onFilterC
                   </button>
                   
                   {activeStatusFilter === column.key && (
-                    <StatusFilter
+                    <TableStatusFilter
                       columnKey={column.key}
                       availableStatuses={getAvailableStatuses(column.key)}
                       selectedStatuses={filters?.statusFilters[column.key]?.selectedStatuses || []}

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { TableProps, TableFilters, DateFilterConfig } from '../../types/table';
-import styles from '../../styles/Table.module.css';
-import { TableHeader } from './TableHeader';
-import { TableRow } from './TableRow';
-import { LoadingRow } from './LoadingRow';
-import { Pagination } from './Pagination';
+import { TableProps, TableFilters, DateFilterConfig } from '@/types/table';
+import styles from '@/styles/Table.module.css';
+import { TableHeader } from '@/components/Table/TableHeader/TableHeader';
+import { TableRow } from '@/components/Table/TableRow';
+import { TableLoadingRow } from '@/components/Table/TableLoadingRow';
+import { TablePagination } from '@/components/Table/TablePagination';
 
 /**
  * Generic reusable Table component
@@ -82,7 +82,7 @@ export function Table<T extends { id: string }>({
         />
           <tbody>
             {showLoading && [...Array(5)].map((_, index) => (
-              <LoadingRow key={index} columns={columns} index={index} />
+              <TableLoadingRow key={index} columns={columns} index={index} />
             ))}
           </tbody>
         </table>
@@ -149,7 +149,7 @@ export function Table<T extends { id: string }>({
       
       {/* Render pagination if pagination props are provided */}
       {pagination && (
-        <Pagination
+        <TablePagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={pagination.onPageChange}

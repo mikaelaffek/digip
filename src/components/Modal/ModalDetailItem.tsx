@@ -1,13 +1,10 @@
 "use client";
 
 import React from 'react';
-import styles from './Modal.module.css';
-import { DetailItemProps } from './types/detail-item';
+import styles from '@/components/Modal/styles/ModalComponent.module.css';
+import { ModalDetailItemProps } from '@/components/Modal/types/modal-detail-item';
 
-/**
- * A reusable component for displaying labeled details in modals or other UI elements
- */
-const DetailItem: React.FC<DetailItemProps> = ({
+const ModalDetailItem: React.FC<ModalDetailItemProps> = ({
   label,
   value,
   className = '',
@@ -25,4 +22,4 @@ const DetailItem: React.FC<DetailItemProps> = ({
   );
 };
 
-export default DetailItem;
+export default ModalDetailItem;

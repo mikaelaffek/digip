@@ -1,8 +1,8 @@
 "use client";
 
 import React, { CSSProperties } from 'react';
-import styles from './Modal.module.css';
-import { ModalProps } from './types/modal';
+import styles from './styles/ModalComponent.module.css';
+import { ModalProps } from '@/components/Modal/types/modal';
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,

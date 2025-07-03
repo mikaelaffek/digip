@@ -9,7 +9,7 @@ interface LoadingRowProps<T> {
   index: number;
 }
 
-export function LoadingRow<T>({ columns, index }: LoadingRowProps<T>) {
+export function TableLoadingRow<T>({ columns, index }: LoadingRowProps<T>) {
   return (
     <tr className={styles.loadingRow}>
       {columns.map((column) => (
