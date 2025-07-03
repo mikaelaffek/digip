@@ -4,6 +4,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { NotificationContainer } from '../src/components/Notification/NotificationService';
+import { TranslationProvider } from '../src/i18n';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(() => new QueryClient({
@@ -17,9 +18,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <NotificationContainer />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <TranslationProvider>
+        {children}
+        <NotificationContainer />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </TranslationProvider>
     </QueryClientProvider>
   );
 }

@@ -35,6 +35,12 @@
   border: 1px solid var(--border-light);
 }
 
+.filteredCount {
+  color: var(--primary);
+  font-style: italic;
+  font-weight: 400;
+}
+
 /* Filters */
 .filtersContainer {
   margin-bottom: 32px;
