@@ -4,11 +4,13 @@ A Next.js application that displays trademark data in a sortable and filterable 
 
 ## Features
 
+- **Modular Architecture**: Domain-driven design with feature modules
+- **Custom React Hooks**: Separation of concerns with focused, reusable hooks
 - **Generic Table Component**: Reusable table component that can be used with any data type
-- **Trademark-specific Table**: Implementation of the generic table for trademark data
-- **Sorting and Filtering**: Sort by clicking column headers and filter with the search box
+- **Sorting and Filtering**: Sort by clicking column headers and filter with search, date, and status filters
 - **Modal Details**: Click on any row to see detailed information about the trademark
-- **React Query Integration**: Efficient data fetching and caching
+- **Internationalization**: Multi-language support with i18n system
+- **Path Aliases**: Clean imports using TypeScript path aliases
 - **TypeScript**: Full type safety throughout the application
 - **Responsive Design**: Works on mobile and desktop devices
 
@@ -17,24 +19,43 @@ A Next.js application that displays trademark data in a sortable and filterable 
 ```
 src/
   components/
-    Table/                        # Generic, reusable table components
-      Table.tsx                   # Main table component
-    TrademarkTable/               # Specific table for trademarks
-      TrademarkTable.tsx          # Trademark-specific table implementation
-      TrademarkTableFilters.tsx   # Search and filter controls
-      TrademarkTableModals.tsx    # Modal for displaying trademark details
-  services/
-    trademarkService.ts           # API/data fetching for trademarks
-  hooks/
-    useTrademarks.ts              # Custom hook for React Query and trademark data
-  types/
-    trademark.d.ts                # TypeScript interfaces for trademark data
-    table.d.ts                    # TypeScript interfaces for table components
-  styles/
-    Table.module.css              # Styles for generic table
-    TrademarkTable.module.css     # Styles for trademark-specific components
+    Modal/                       # Reusable modal components
+    Table/                       # Generic, reusable table components
+  config/
+    constants.ts                 # Application-wide constants
+  i18n/                          # Internationalization system
+    en.ts                        # English translations
+    TranslationProvider.tsx      # Context provider for translations
+    index.ts                     # Export of translation functions
+  modules/
+    trademark/                   # Trademark domain module
+      components/                # Trademark-specific components
+        TrademarkTable.tsx       # Main trademark table component
+        TrademarkTableFilters.tsx # Search and filter controls
+        TrademarkTableModals.tsx # Modal for displaying trademark details
+        TrademarkTableColumns.tsx # Column definitions for the table
+        TrademarkDetailsModal/   # Components for the details modal
+      hooks/                     # Trademark-specific hooks
+        useTrademarkFilters.ts   # Hook for managing filters
+        useTrademarkModal.ts     # Hook for managing modal state
+        useTrademarkSorting.ts   # Hook for managing sorting
+        useTrademarkTable.ts     # Main hook combining all functionality
+        useTrademarks.ts         # Hook for fetching trademark data
+        usePagination.ts         # Hook for pagination
+      services/                  # Trademark-specific services
+        trademarkService.ts      # API/data fetching for trademarks
+  types/                         # TypeScript type definitions
+    api.ts                       # API response types
+    trademark.d.ts               # Trademark data types
+    table.d.ts                   # Table component types
+  styles/                        # CSS modules
+  utils/                         # Utility functions
+  app/                           # Next.js App Router
+    trademark/                   # Trademark route
+      page.tsx                   # Trademark page component
+    page.tsx                     # Root page (redirects to /trademark)
   public/
-    trademarks.json               # Mock API data
+    trademark-portfolio.json     # Mock API data
 ```
 
 ## Getting Started
