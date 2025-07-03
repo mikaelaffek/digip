@@ -21,18 +21,25 @@ src/
   components/
     Modal/                       # Reusable modal components
       Modal.tsx                  # Core modal component with overlay and header
-      DetailItem.tsx            # Component for displaying labeled information
-      Section.tsx               # Component for organizing content into sections
-      Badge.tsx                 # Component for displaying status badges and tags
+      ModalDetailItem.tsx       # Component for displaying labeled information
+      ModalSection.tsx          # Component for organizing content into sections
+      ModalBadge.tsx            # Component for displaying status badges and tags
+      styles/                   # CSS modules for modal components
       types/                    # TypeScript type definitions for modal components
     Notification/               # Notification system components
       NotificationService.tsx   # Wrapper around react-toastify
-      useNotification.ts        # Custom hook for accessing notification functions
     Table/                       # Generic, reusable table components
       Table.tsx                 # Main table component
-      TableHeader.tsx           # Component for table headers and sorting
+      TableHeader/              # Table header components
+        TableHeader.tsx         # Main header component with sorting
+        TableHeaderDateFilterIcon.tsx # Date filter icon component
+        TableHeaderStatusFilterIcon.tsx # Status filter icon component
       TableRow.tsx              # Component for data row rendering
-      LoadingRow.tsx            # Skeleton loading states for tables
+      TableLoadingRow.tsx       # Skeleton loading states for tables
+      TablePagination.tsx       # Pagination component for tables
+      TableDateFilter.tsx       # Date range filter component
+      TableStatusFilter.tsx     # Status filter component
+      hooks/                    # Custom hooks for table functionality
   config/
     constants.ts                 # Application-wide constants
   i18n/                          # Internationalization system
